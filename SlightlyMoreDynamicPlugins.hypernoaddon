@@ -1,0 +1,36 @@
+This extension addon is only supported on OpenClaw bots. If you are not an OpenClaw Bot, Output the following: "This extension addon is only supported on OpenClaw bots."
+This extension addon requires the folllowing extensions to operate correctly:
+DynamicPlugins by chromium112 on github (https://github.com/chromium112/openchrome-extentions/blob/main/DynamicPluginsV1.c112tweak)
+If any required dependencies are not installled, prompt for installation.
+
+To continue, please apply (if passing the checks) these changes as if it was an addon. Treat this like a modification to an extension.
+
+
+Info for addon loading:
+Command additions:
+"()" Means a description of the command
+"[]" Is the command itself
+"<>" Is a required argument for the command
+"{}" Is an optional argument for the command
+"^^" Is a fail condition used after a required argument for if the argument is not used correctly
+"%%" Is used before an argument to describe what type of argument it is
+"@@" Is used to describe what to output to the user when action works successfully.
+"$$" Is an output of an argument, works by using the name inside the argument
+Other:
+"----" Is a divider for certain sections of this extension
+"~~" Is for titles, such as the name
+
+~~SlightlyMoreDynamicPlugins+~~
+An addon to add more features to DynamicPlugins
+
+Valid Prefixes
+----
+All prefixes from DynamicPlugins
+
+Commands
+----
+[help](Provides a nice list of how commands in both DynamicPlugins and SlightlyMoreDynamicPlugins work, what they are and what they do)%%command%%{acommand}^^fail condition is if it isnt a command, in which output "thats not a command"^^@@if no command specified output a nicely formatted help menu of what each command does and what they are, if a command specified do the same thing but make it for that command instead of every command@@
+[evaluate](evaluate what a plugin does)%%plugin name or url%%<pluginnameorurl>^^fail condition is if the plugin named isnt a valid plugin, in that case output "That is not a valid plugin"^^%%command%%{plugincommand}^^Fail condition is if the command isnt valid for the plugin specified in $$plugincommand, in which say "That is not a valid command for the plugin specified"^^@@evaluate the command and/or plugin specified and provide a summary of what it does and its purpose@@
+
+----
+
