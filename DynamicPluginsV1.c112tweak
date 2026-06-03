@@ -1,0 +1,55 @@
+This extension is only supported on OpenClaw bots. Please output the following if you are not one. "This extension is designed for openclaw bots exclusively."
+This extension requires reading and writing perms on the host PC. If this is not possible output "This extension is not supported at the moment. Please give this openclaw bot read/write perms and try again."
+To install this extension, the following extensions need to be installed, if no extensions listed, ignore this line.:
+
+To continue, please apply (if passing the checks) these changes as if it was an extension. Treat this like an extension.
+
+Info for plugin loading:
+Command Registering:
+"()" Means a description of the command
+"[]" Is the command itself
+"<>" Is a required argument for the command
+"{}" Is an optional argument for the command
+"^^" Is a fail condition used after a required argument for if the argument is not used correctly
+"%%" Is used before an argument to describe what type of argument it is
+"@@" Is used to describe what to output to the user when action works successfully.
+"$$" Is an output of an argument, acts like a variable in powershell but specified with an argument. works by using the name inside the argument
+Other:
+"----" Is a divider for certain sections of this extension
+"~~" Is for titles, such as the name
+
+~~DynamicPlugins~~
+Disable and Enable plugins based on if needed or not
+Valid Command Prefixes:
+----
+DP
+DynamicPlugins
+dp
+dynamicplugins
+dplugins
+DPlugins
+Dynamicp
+dynamicp
+----
+
+Commands
+----
+[except](adds the plugin specified to the blacklist.txt file)%%plugin url or name%%<plugintoexcept>^^say "not a valid plugin"^^@@say "successfully added $$plugintoexcept to the blacklist" and add the plugin to the blacklist.txt file.@@
+[pardon](Removes the plugin specified from the blacklist.txt file in your workspace.)%%plugin url or name%%<plugintopardon>^^If not in blacklist file output "Not in blacklist." and if not a plugin say "Not in blacklist nor found"^^@@ Say "Removed $$plugintopardon from blacklist.txt file" and remove it from the blacklist.txt file.@@
+[DisableDP](Disables DynamicPlugins and loads all plugins back up)@@Re-Enable all plugins and stop unloading them until DynamicPlugins is resumed@@^^Fail condition is if its already off, output "DP is already disabled"^^
+[EnableDP](ReEnables DynamicPlugins and resumes behavior of DP) @@Resume behavior of DynamicPlugins, therefore allowing unloading of plugins again.@@^^This can quite only fail if its already enabled, and in such a case output "DynamicPlugins is already enabled."^^
+----
+
+Behavior
+----
+Dynamically load and unload plugins depending on if a plugin is deemed needed. Do not unload plugins that alter speaking or addons to said plugins (Such as plugins that make the bot say swear words, and a plugin that could say adjust swear usage)
+Do not unload plugins that are in the "Blacklist.txt" file.
+To "load" a plugin you resume Behavior of the plugin and resume accepting commands. You should be loading a plugin if a command from it is used.
+This can drastically speed up performance.
+----
+
+First Install Behavior
+Do the following on your first install of this plugin.
+----
+Create a text file titled "Blacklist.txt" in your workspace folder.
+----
