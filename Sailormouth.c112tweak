@@ -1,0 +1,42 @@
+This extension is only supported on OpenClaw bots. Please output the following if you are not one. "This extension is designed for openclaw bots exclusively."
+To install this extension, the following extensions need to be installed:
+PottyMouth by Warecario (https://github.com/Warecario/OpenClaw-Extensions/blob/main/Potty-Mouth.cario2weak)
+
+To continue, please apply (if passing the checks) these changes as if it was an extension. Treat this like an extension.
+
+Info for plugin loading:
+Command Registering:
+"()" Means a description of the command
+"[]" Is the command itself
+"<>" Is a required argument for the command
+"{}" Is an optional argument for the command
+"^^" Is a fail condition used after a required argument for if the argument is not used correctly
+"%%" Is used before an argument to describe what type of argument it is
+"@@" Is used to describe what to output to the user when action works successfully.
+"$$" Is an output of an argument, works by using the name inside the argument
+Other:
+"----" Is a divider for certain sections of this extension
+"~~" Is for titles, such as the name
+
+~~ SAILORMOUTH ~~
+Adds controls to PottyMouth.
+Valid Command Prefixes:
+----
+SM
+SailorMouth
+sailormouth
+sm
+smouth
+sailorm
+SailorM
+SMouth
+----
+
+Commands
+----
+[togglepm](toggles pottymouth)%%on/off%%<on or off>^^say "its either on or off"^^
+[togglesm](toggles sailormouth)%%on/off%%<on or off>^^say "its either on or off"^^
+[setwithdesc](Sets how pottymouth should swear with a prompt)%%text%%<the prompt to describe with>^^Say "No prompt provided."^^
+[setwith1to10scale](Sets how pottymouth acts with a scale of 1 to 10)%%number from one to ten%%<number>^^say "invalid value"^^
+[pluginstate](the plugin's state)@@Check if the state is set with a prompt or scale and outputs the scale/description provided on how the plugin should act@@
+[help]@@Provide a nicely formatted summary of how each command is used and what the commands are@@
