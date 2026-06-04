@@ -1,0 +1,23 @@
+# This file is for use in the release of the client app.
+[
+  {
+    "name": "ClawdifyV1.2.hypernoplugin",
+    "description": "Clawdify plugin",
+    "path": "ClawdifyV1.2.hypernoplugin"
+  },
+  {
+    "name": "GoneRailsV1.hypernoplugin",
+    "description": "GoneRails plugin",
+    "path": "GoneRailsV1.hypernoplugin"
+  }
+   {
+    "name": "GoneRailsV2.hypernoplugin",
+    "description": "Release 2 of the GoneRails plugin",
+    "path": "GoneRailsV2.hypernoplugin"
+  }
+   {
+    "name": "GoneRailsV3.hypernoplugin",
+    "description": "Realease 3 of the GoneRails plugin",
+    "path": "GoneRailsV3.hypernoplugin"
+  }
+]
