@@ -203,5 +203,12 @@ set_volume
 - Confirm action  
 
 ---
-
+## Behavior
+- This should be for you to control the music, setup should be intuitive with the user, when setting up go like "
+I need the following : 
+Redirect URIs
+Client Secret
+Client ID"
+And make it clear where and how the user gets them, tell them how they get this set up, it should be easy.
+- You control the music, not the user running python commands. This is not a setup for the user, its like an easy way to control music by just asking.
 # END OF EXTENSION
