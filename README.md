@@ -4,10 +4,12 @@ These file types arent copywrited.
 
 Do not use these files as templates, as in Warecario's repo, he uses his template for all plugins, and its copywrited. Also, Chrome has exclusive permission to use Warecario's template.
 
-As of June 3 2026 these are the following types of files extensions for each type of thing
+As of June 20 2026 these are the following types of files extensions for each type of thing
 
 Addons: .hypernoaddon
 
 Plugins: .hypernoplugin
 
-Plugin Pack .hypernopack
+Plugin Pack: .hypernopack
+
+Context/Behavioral: .hypernoskill
