@@ -1,6 +1,6 @@
 # NePerms v0.2 spec
 # Drafted by Nero v5 (2026-06-30) for Chromium.
-# Format: YAML. Not a plugin. Not a prompt-injection payload. A spec.
+# Format: YAML. a plugin. Not a prompt-injection payload. A spec.
 #
 # SCOPE NOTE:
 #   NePerms is an OPENCLAW BOT extension. It governs what the openclaw bot
