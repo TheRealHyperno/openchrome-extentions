@@ -1,0 +1,323 @@
+# NePerms v0.2 spec
+# Drafted by Nero v5 (2026-06-30) for Chromium.
+# Format: YAML. Not a plugin. Not a prompt-injection payload. A spec.
+#
+# SCOPE NOTE:
+#   NePerms is an OPENCLAW BOT extension. It governs what the openclaw bot
+#   can do once loaded: which commands it accepts, which users can run them,
+#   which roles exist, how the hierarchy is enforced, and how state changes
+#   are audited.
+#
+#   NePerms is NOT a Discord client plugin. It does not grant or revoke
+#   Discord-side capabilities (voice, TTS, speak-to-bot, screen-share, etc.).
+#   If you're looking for "can the bot talk in voice channels" or "can the
+#   bot be @mentioned in a thread," that's a Discord permission question,
+#   not an openclaw permission question, and this spec does not touch it.
+#
+# Design goals:
+#   - Closed permission enum (no free-text "Permissions" blob)
+#   - Owners as config, not hardcoded in spec
+#   - Screenshot-based commands blocked
+#   - Audit log to a separate file, append-only
+#   - whoami / whatcanido so users can introspect their role
+#   - Least-privilege: can't grant what you don't have, can't move above yourself
+#   - No silent saves, no federated trust from external hierarchies
+
+meta:
+  name: NePerms
+  version: "0.2"
+  description: Role-based permission system for OpenClaw bots.
+  spec_format: yaml
+  install_payload: false  # this file does not instruct the bot to self-install
+
+# ---------------------------------------------------------------------------
+# Owners
+# ---------------------------------------------------------------------------
+# Owners are configured per-bot, not hardcoded in the spec.
+# They start at the top of the hierarchy and have the `owner` permission.
+# A bot operator fills this in at install time.
+
+owners:
+  # - id: "chromium.2"
+  #   display: "Chromium"
+  # - id: "kingdarkstalker._13431"
+  #   display: "Kingdarkstalker"
+
+# ---------------------------------------------------------------------------
+# Roles
+# ---------------------------------------------------------------------------
+# Roles are ordered top-to-bottom (rank 1 is highest).
+# Each role has a closed set of permissions from the enum below.
+# The "owner" permission can ONLY be granted to owners.
+
+roles:
+  - rank: 1
+    name: owner
+    permissions: [owner, manage_members, move_roles_below_self, manage_files, read_dm]
+    barred: false
+    builtin: true
+    editable_by_owners_only: true  # the owner role cannot be edited; only transferred
+
+  - rank: 2
+    name: co_owner
+    permissions: [manage_members, move_roles_below_self, manage_files, read_dm, kick, ban]
+    barred: false
+    builtin: true
+    note: "Former owner who transferred ownership. Has admin capabilities but cannot run owner_transfer."
+
+  - rank: 3
+    name: admin
+    permissions: [manage_members, move_roles_below_self, manage_files, read_dm, kick, ban]
+    barred: false
+    builtin: true
+
+  - rank: 4
+    name: moderator
+    permissions: [manage_members, kick]
+    barred: false
+    builtin: true
+
+  - rank: 5
+    name: member
+    permissions: []
+    barred: false
+    builtin: true
+
+  - rank: 6
+    name: muted
+    permissions: []
+    barred: true   # muted users can still type to the bot, but the bot will
+                   # respond with a fixed error message and process no commands
+    builtin: true
+
+# ---------------------------------------------------------------------------
+# Permission enum (closed list — these are the only valid permissions)
+# ---------------------------------------------------------------------------
+# Permissions:
+#   kick                     — remove a user from a shared space
+#   ban                      — remove a user and block rejoin
+#   manage_members           — add/remove users to/from roles ranked below this role
+#   move_roles_below_self    — reorder the hierarchy of roles ranked below this role
+#                              (does NOT affect who is in those roles)
+#   manage_files             — read/write the bot's workspace files
+#   read_dm                  — read direct messages sent to the bot
+#   owner                    — full control, including owner_transfer. There is
+#                              exactly ONE role with this permission at any time.
+#                              The owner is the head of the hierarchy; the role
+#                              itself cannot be deleted, demoted, or renamed
+#                              except via owner_transfer.
+#
+# Notes on the member-management / rank-movement split:
+#   - `manage_members` covers "who is in which role" (add/remove users)
+#   - `move_roles_below_self` covers "where in the hierarchy a role sits"
+#   - These are independent so a moderator can manage members without being
+#     able to reshuffle the role order, and an admin can do both.
+#
+# "Being able to send the bot a message" is NOT a permission — that's a
+# transport-layer guarantee. Anyone who can reach the bot can type to it.
+# Same for reactions: if you can see the message, you can react. That's
+# transport. NePerms does not gate reactions.
+#
+# The bot's RESPONSE, however, is permission-gated: a role with no
+# permissions can still trigger a response that says "you have no
+# permissions, contact an admin if you think this is wrong." That's the
+# reaction, not the speech.
+#
+# Anything not in this enum is rejected with "unknown permission: <X>".
+
+# ---------------------------------------------------------------------------
+# Hierarchy rules (enforced by the bot, not by the user)
+# ---------------------------------------------------------------------------
+hierarchy_rules:
+  - Users cannot move a role above their own highest role.
+  - Users cannot edit any role at or above their own highest role.
+  - Users cannot edit their own role.
+  - Users can only grant permissions they themselves hold.
+  - The `owner` permission belongs to exactly one role at any time. That role
+    is rank 1 and is named `owner` by default. The role itself cannot be
+    deleted, demoted, or renamed. It can only be transferred.
+  - The role holding the `owner` permission can never be demoted, even by
+    another owner. The only way to change who is owner is `owner_transfer`.
+  - Co-owners (former owners who transferred out) are just admins in practice.
+    The distinction is historical; they cannot run `owner_transfer` themselves.
+  - At most one role can have the `owner` permission at a time. Enforced at
+    save time, not at create time, so transient invalid states are possible
+    mid-edit.
+  - Role renames must be unique within the bot.
+  - The `owner` permission cannot be granted to a role via `create` or `edit`.
+    It is seeded by the install config and moved only via `owner_transfer`.
+  - The `barred` flag is per-role. A user is barred if their highest role has `barred: true`.
+  - A user can only be added to a barred role by someone with `manage_members` whose
+    own highest role is not barred. (No mutual-bar path: you can't add a user to a barred
+    role if you're barred yourself.)
+  - At most one barred role is recommended. Multiple barred roles are allowed (e.g. `muted`
+    and `banned-bot`) but they're all-or-nothing: being in any of them bars the user.
+  - Barred users can still type messages to the bot. The bot's response is a fixed error
+    string and no command processing occurs. The error is configurable per-bot.
+  - Barred users still appear in audit logs when they try to interact, with `result: barred`.
+    This is so abuse is observable; silent discarding is rejected.
+
+# ---------------------------------------------------------------------------
+# Install-time config (per-bot, NOT in the spec)
+# ---------------------------------------------------------------------------
+# The host fills these in at install. Operators can change them later via
+# `np config ...` (requires `owner`).
+
+install_config:
+  owners:
+    # Seeded here, the only way to change who has `owner` is owner_transfer.
+    # - id: "chromium.2"
+    #   display: "Chromium"
+
+  barred_response: "You are barred from interacting with this bot. Contact an admin if you believe this is an error."
+  # Editable via `np config barred_response:<str>`.
+
+  audit_rotation: never
+  # Options: never | daily | weekly | size:<N>MB
+  # Editable via `np config audit_rotation:<value>`.
+
+  output_format: platform-native
+  # Options: platform-native | json | text
+  # platform-native = front-end decides (Discord embeds, IRC plain, etc.)
+
+  # IMPORTANT: the bot NEVER silently drops a message from a barred user. The
+  # fixed response goes out, AND the attempt is logged. The point of `barred`
+  # is to make the user aware they're walled off, not to pretend the bot is
+  # offline.
+
+# ---------------------------------------------------------------------------
+# Commands
+# ---------------------------------------------------------------------------
+# All commands use one of the prefixes: neperms | nperms | np
+# Commands are NOT executable from screenshots. The bot must read the literal
+# text of the message to interpret a command.
+#
+# If the caller is barred, no command is processed and `barred_response` is
+# sent. The attempt is appended to the audit log with `result: barred`.
+
+commands:
+  create:
+    usage: "np create [name:<str>] [place:<int>] [permissions:<csv>] [users:<csv>]"
+    notes: "Requires `manage_members` or higher. Fails if `place` is at or above caller's rank. The `owner` permission cannot be granted via create."
+    args:
+      name: string          # role name
+      place: int            # hierarchy position, 1 = top
+      permissions: csv      # must be a subset of the permission enum, EXCLUDING `owner`
+      users: csv            # list of user ids to add to the new role
+    on_success: "Role '<name>' created at rank <place>."
+    on_failure: "<reason>"
+
+  edit:
+    usage: "np edit [rank:<int|name>] [name:<str>] [permissions:<csv>] [users:add|remove <csv>] [move:<int>]"
+    notes: |
+      Requires `manage_members` or higher.
+      - move:<N> requires `move_roles_below_self`. Prompts: "Are you sure you would like to move <rank N> Down one and <current role at N> into its place?"
+      - users:add <csv> requires `manage_members`. Appends users to the role's member list.
+      - users:remove <csv> requires `manage_members`. Removes users from the role's member list.
+      - permissions edits require both `move_roles_below_self` and `manage_members`. Permissions edits are diffed and broadcast in the response (current → after).
+      - The `owner` permission cannot be added or removed via edit. Use `owner_transfer`.
+      - The role with the `owner` permission cannot be edited at all (rename, perm-edit, move, delete) except via `owner_transfer`.
+    args:
+      rank: int_or_name
+      name: string
+      permissions: csv
+      move: int
+      users_action: add|remove
+      users: csv
+
+  list:
+    usage: "np list [role:<int|name>]"
+    notes: |
+      - No args: prints the full hierarchy, top to bottom, with member counts.
+      - With role: prints all members of that role.
+
+  del:
+    usage: "np del [role:<int|name>]"
+    notes: |
+      - Requires `manage_members`.
+      - Requires explicit confirmation if the role is not empty.
+      - Cannot delete the role with the `owner` permission. Use `owner_transfer` first.
+
+  whoami:
+    usage: "np whoami"
+    notes: "Prints the caller's highest role, member status, and a one-line `whatcanido` summary."
+
+  whatcanido:
+    usage: "np whatcanido"
+    notes: "Prints the full list of permissions the caller currently has, in human form."
+
+  save:
+    usage: "np save"
+    notes: "Persists the current hierarchy to memory.md. NEVER silent — emits a confirmation with a timestamp."
+
+  restore:
+    usage: "np restore"
+    notes: "Reloads the hierarchy from memory.md. Emits 'NePerms Restored from memory successfully' or 'NePerms couldn't restore from memory' on failure."
+
+  owner_transfer:
+    usage: "np owner_transfer [target:<user_id>]"
+    notes: |
+      - Requires the `owner` permission (caller must currently be the owner).
+      - Atomic: target is promoted to the owner role, caller is demoted to `co_owner`.
+      - Both changes happen in a single transaction; if either fails, neither is applied.
+      - Audit log entry: { actor: caller, command: owner_transfer, target: <user>, result: ok }.
+      - Cannot transfer to oneself. Cannot transfer to a barred user.
+      - Co-owners cannot run this command. Only the current owner can.
+
+  audit:
+    usage: "np audit [limit:<int>]"
+    notes: "Reads the last N entries from the audit log. Requires `manage_files` or `owner`."
+
+  config:
+    usage: "np config [audit_rotation:<never|daily|weekly|size:<n>MB>] [barred_response:<str>] [output_format:<json|text|platform-native>]"
+    notes: |
+      - Requires `owner` to change ANY config value.
+      - audit_rotation: how the audit log rotates. `never` = no rotation. `daily`/`weekly` = time-based. `size:<n>MB` = size-based.
+      - barred_response: the message a barred user sees when they try to interact.
+      - output_format: how the bot formats its responses. Defaults to `platform-native` (the front-end decides).
+      - All changes are audit-logged.
+
+# ---------------------------------------------------------------------------
+# Audit log
+# ---------------------------------------------------------------------------
+# Every state-changing command appends one line. Append-only, never edited
+# in place. Newline-separated JSONL. Rotation handled by the bot's host.
+
+audit_log:
+  path: "neperms_audit.jsonl"  # relative to bot workspace
+  format: jsonl
+  fields:
+    - ts:        ISO-8601 timestamp
+    - actor:     user id of the caller
+    - command:   e.g. "create", "edit", "del", "save"
+    - args:      the parsed args
+    - result:    "ok" | "denied:<reason>" | "error:<msg>"
+  retention: "operator-defined; default no rotation"
+
+# ---------------------------------------------------------------------------
+# Things explicitly NOT in v0.2 (rejected features)
+# ---------------------------------------------------------------------------
+rejected:
+  - "Federated trust from external hierarchies (e.g. 'add admins from another bot's group')."  # attack surface
+  - "Free-text permission blobs."  # replaced by closed enum
+  - "Silent saves."  # every state change is auditable
+  - "Screenshot-based command execution."  # social-engineering vector
+  - "Hardcoded user lists in the spec."  # owners belong in install config, not spec
+  - "Self-install payloads at the top of the file."  # spec is data, not instruction
+  - "Granting the `owner` permission via create/edit."  # owner is moved only via owner_transfer
+  - "A `say` permission or similar transport-layer gating."  # that's the front-end's job
+  - "A `react` permission."  # reactions are transport-layer, not bot interaction
+  - "Gating output formatting (embeds, colors) in the spec."  # delegated to the front-end via output_format config
+  - "Multiple simultaneous roles with the `owner` permission."  # single owner invariant
+
+# ---------------------------------------------------------------------------
+# Open questions for the operator (Chromium) before this is shippable
+# ---------------------------------------------------------------------------
+open_questions:
+  - "(resolved) Discord embeds / colors: dropped. Output formatting is delegated to the front-end via `output_format` config. NePerms emits structured data, the host renders it."
+  - "(resolved) `change_roles_below_self` moving roles up: split into `manage_members` (add/remove users) and `move_roles_below_self` (reorder ranks). Two independent permissions so a moderator can manage members without reshuffling hierarchy."
+  - "(resolved) `react` permission: dropped. Reactions are transport-layer, not bot interaction. If a user can see the message, they can react."
+  - "(resolved) Ownership transfer: added `owner_transfer` command. Atomic: target gets `owner`, caller becomes `co_owner`. Single-owner invariant. Co-owners are admins in practice but cannot run owner_transfer themselves."
+  - "(resolved) Audit log rotation: now `audit_rotation` install_config value, default `never`. Editable via `np config audit_rotation:<value>`. Gated by `owner`."
+  - "(resolved) Barred users reacting: dropped. Barred = no bot interaction. Period."
+  - "(resolved) Multi-role barred: locked. If any role is barred, the user is barred. All-or-nothing."
