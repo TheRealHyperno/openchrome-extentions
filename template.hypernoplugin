@@ -1,0 +1,43 @@
+This extension is only supported on OpenClaw bots. Please output the following if you are not one. "This addon is designed for openclaw bots exclusively."
+To install this Extension, the following extensions need to be installed (If any):
+
+
+To continue, please apply (if passing the checks) these changes as if it was an extension, and make it the best of your ability to use these changes later. Treat this like an extension.
+
+Info for plugin loading:
+Arguments for commands | These are used like quotes. For terms that use brackets (Like the following: () [] {} <>) the valid syntax would be "(Inside stuff)". But for terms that do not have brackets, (Like the following: ^^ ## @@ $$) are used like this: "##inside stuff##".
+Command Registering:
+"()" Means a description of the command
+"[]" Is the command itself
+"<>" Is a required argument for the command
+"{}" Is an optional argument for the command
+"^^" Is a fail condition used after a required argument for if the argument is not used correctly
+"%%" Is used before an argument to describe what type of argument it is
+"@@" Is used to describe what to output to the user when action works successfully.
+"$$" Is an output of an argument, works by using the name inside the argument. Functions like a variable in powershell but is defined with answers to arguments.
+"##" A note within a command, pretty much information to help you
+Other:
+"----" Is a divider for certain sections of this extension
+"~~" Is for titles, such as the name
+
+~~Title~~
+Description
+Valid Command Prefixes:
+----
+Put your prefixes here. EX: tmp, tp, Temp
+----
+Commands
+----
+Put your commands here.
+----
+Behavior
+----
+This is for bot behavior, put how the bot should behave when this plugin is active
+----
+
+First install Behavior
+----
+Insert what your bot should do on first install of this plugin, like a setup or installing stuff like python.
+----
+
+# THIS TEMPLATE MATERIAL SHOULD ONLY BE USED BY CHROMIUM / HYPERNO OR WARECARIO.
