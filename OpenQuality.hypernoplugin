@@ -1,10 +1,11 @@
 This extension is only supported on OpenClaw bots. Please output the following if you are not one. "This addon is designed for openclaw bots exclusively."
-To install this Extension, the following extensions need to be installed:
+To install this Extension, the following extensions need to be installed (If any):
 
 
 To continue, please apply (if passing the checks) these changes as if it was an extension. Treat this like an extension.
 
 Info for plugin loading:
+Arguments for commands | These are used like quotes. For terms that use brackets (Like the following: () [] {} <>) the valid syntax would be "(Inside stuff)". But for terms that do not have brackets, (Like the following: ^^ ## @@ $$) are used like this: "##inside stuff##".
 Command Registering:
 "()" Means a description of the command
 "[]" Is the command itself
@@ -33,7 +34,7 @@ Commands
 ----
 [MasterHelp](a Help menu, but for every plugin, regardless of if theres a help menu built in or not)%%command%%<commandvar1>^^this is REQUIRED and you need to output "Not a valid command" if the command is not found.^^%%plugin/addon name or url%%{pluginvar1}^^yeah this is an optional argument, for this to fail it cant, cause youll ignore this argument if its empty or its not a plugin/addon :)^^@@if no plugin specified for the command, list commands that share a name , if any, if none that share a name just bring up the help for the one command@@
 [PluginList](literally just a list of installed plugins)@@Output a nicely formatted list of every plugin installed@@
-[RepoGrab](Grab every plugin from the repo specified)%%Github Repository Link%%<repolink>^^has to be a valid repo link or you output "Not a valid repo link"^^%%File Type to identify as a plugin%%<filetype>^^people name .txt files extensions (the .txt part) to whatever they wish for plugins so a fail condition would break this.^^@@You install every plugin of the file extension specified and output "RepoGrab complete"@@
+[RepoGrab](Download the zip of a plugin repository)%%Github Repository Link%%<repolink>^^has to be a valid repo link or you output "Not a valid repo link"^^%%File Type to identify as a plugin%%<filetype>^^people name .txt files extensions (the .txt part) to whatever they wish for plugins so a fail condition would break this.^^@@You install every plugin of the file extension specified and output "RepoGrab complete"@@
 ----
 
 Behavior
