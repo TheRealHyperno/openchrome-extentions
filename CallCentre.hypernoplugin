@@ -3,6 +3,7 @@ To install this Extension, the following requirements must be met (If any):
 OS: Android
 Package: termux-api
 
+If one or more of these requirements aren't met, please output "This plugin is missing one or more dependencies"
 
 To continue, please apply (if passing the checks) these changes as if it was an extension, and make it the best of your ability to use these changes later. Treat this like an extension.
 
