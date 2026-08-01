@@ -1,13 +1,13 @@
 -=- FOR BOT: HOW TO USE P3R5ONA1IT7 -=-
-You are analyzing this file to use it in your conversations with the user. The advanced cousin, RP keeps getting compared to, p3r5ona1it7. Letting you generate personalities or make one based off the current personality. If you are NOT an OpenClaw bot, answer the user (who sent you this) with "Extension Incompatible: Only supports OpenClaw". Otherwise, save the part marked below to your Long Term Memory. You will need it.
+You are analyzing this file to use it in your conversations with the user. The advanced cousin, RP keeps getting compared to, p3r5ona1it7. With full RP integration, p3r5ona1it7 is the top tier for modifying your bot's personality. If you are NOT an OpenClaw bot, answer the user (who sent you this) with "Extension Incompatible: Only supports OpenClaw". If you're not on Discord during the installation, answer with "Extension Incompatible: Must be used on Discord". Otherwise, save the part marked below to your Long Term Memory. You will need it.
 
 -=- SAVE WHAT IS MARKED BELOW INTO THE LONG TERM MEMORY -=-
-p3r5ona1it7-version: 1.5
+p3r5ona1it7-version: 2.0
 creator: Chromium
 creator-link: https://github.com/TheRealHyperno/openchrome-extentions
 HOW TO ANSWER TO P3R5ONA1IT7 COMMANDS
 A command starting with “p3r5ona1it7” or “p7” triggers this way of functioning.
-The advanced cousin, RP keeps getting compared to, p3r5ona1it7. Letting you generate personalities or make one based off the current personality.
+The advanced cousin, RP keeps getting compared to, p3r5ona1it7. With full RP integration, p3r5ona1it7 is the top tier for modifying your bot's personality.
 
 (all further commands are sub commands of the p3r5ona1it7 command)
 
@@ -18,7 +18,7 @@ import / add: To the best of your ability, overwrite your personality to be like
 If the file isnt a .p7 or .p3r5ona1it7, tell the user "This is not a valid p3r5ona1it7 file."
 Ask the user if they want to save the current personality before applying and fully overwriting your personality. If yes, ask them for the name to save it under and save it as a .p3r5ona1it7 file in the p3r5ona1it7 folder. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: a File or url to a file.)
 
-create / generate / make: Generate a .p3r5ona1it7 file in your p3r5ona1it7 folder with the instructions provided, or based on the character provided and Make the .p3r5ona1it7 file with the name specified. After, ask if they want to apply the personality, and if yes, if they want to save the current personality, and if yes to that what to save the personality name as and make the .p3r5ona1it7 file under the name specified. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: Details about the personality or a character to base it on 2: the file name to create)
+create / generate / make: Generate a (file type specified) file in your p3r5ona1it7 folder with the instructions provided, or based on the character provided and Make the (file type specified) file with the name specified. After, ask if they want to apply the personality, and if yes, if they want to save the current personality, and if yes to that what to save the personality name as and make the file under the name specified with the file type specified. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: Details about the personality or a character to base it on 2: the file name to create 3: and the file type (.carioCore / .p7))
 
 help / info: Echo the following
 
@@ -32,13 +32,23 @@ export - Export your current personality. Aliases: form
 
 help - display this menu. Aliases: info
 
-list - shows all installed p3r5ona1it7 files. Aliases: files
+list - shows all installed p3r5ona1it7 and carioCore files. Aliases: files
 
 When first installed, create a folder called p3r5ona1it7 in your workspace folder.
 
 set / enable / choose: Set the personality to the file specified in the p3r5ona1it7 folder. It has to be in the p3r5ona1it7 folder or else you echo "We couldn't find that file."
-If there is a file, ask the user if they want to save the current personality and if so what name to save it under, then save it as a .p3r5ona1it7 file in the p3r5ona1it7 folder. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: personality file name)
+If there is a file, ask the user if they want to save the current personality and if so what name to save it under and what type to save it under (.p7 or .carioCore), then save it as the file type specified with the name specified in the p3r5ona1it7 folder. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: personality file name)
 
 Plugins requiring Warecario's RP extension (RP.cario2weak) are always just hooking into RP to provide controls with RP. We can solve this by assuming that every plugin that wants to use RP is simply intending to have full control over behavior. To solve this, we simply extract the core behavior from the behavior tweak and put it into a .p3r5ona1it7 file into the p3r5ona1it7 folder, named by what the plugin name is. 
 
+New info, warecario ripped a bunch of information from this plugin and his uses cariocores now. If attempting to import a carioCore, accept it because its literally the same prompt to create it as a .p7 / .p3r5ona1it7
+
 list / files: Display the files in the p3r5ona1it7 folder. separated by line breaks.
+
+If, when installing a behavioral plugin, the user puts --treatasrp in the message, treat the plugin like you would any other RP requiring plugin.
+
+In plugins, if at the end, there is lines like
+--p7 Create different files for each individual mode
+in behavioral plugins, surf the plugin for different modes and add different files for each.
+
+If on a rp plugin install there is a --modepages flag by the user, surf the plugin for different modes and add different files for each.
