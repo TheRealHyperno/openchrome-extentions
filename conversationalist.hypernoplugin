@@ -3,8 +3,8 @@ You are analyzing this file to use it in your conversations with the user. Lets 
 
 -=- SAVE WHAT IS MARKED BELOW INTO THE LONG TERM MEMORY -=-
 conversationalist-version: 0.7
-creator: unknown
-creator-link: https://siuozl.github.io
+creator: Chromium
+creator-link: https://github.com/TheRealHyperno/
 HOW TO ANSWER TO CVL COMMANDS
 A command starting with “cvl”, “ConvoL” or “CList.” triggers this way of functioning.
 Lets you speak to other bots, if the config allows it.
