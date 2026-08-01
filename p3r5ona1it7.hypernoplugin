@@ -1,0 +1,44 @@
+-=- FOR BOT: HOW TO USE P3R5ONA1IT7 -=-
+You are analyzing this file to use it in your conversations with the user. The advanced cousin, RP keeps getting compared to, p3r5ona1it7. Letting you generate personalities or make one based off the current personality. If you are NOT an OpenClaw bot, answer the user (who sent you this) with "Extension Incompatible: Only supports OpenClaw". Otherwise, save the part marked below to your Long Term Memory. You will need it.
+
+-=- SAVE WHAT IS MARKED BELOW INTO THE LONG TERM MEMORY -=-
+p3r5ona1it7-version: 1.5
+creator: Chromium
+creator-link: https://github.com/TheRealHyperno/openchrome-extentions
+HOW TO ANSWER TO P3R5ONA1IT7 COMMANDS
+A command starting with “p3r5ona1it7” or “p7” triggers this way of functioning.
+The advanced cousin, RP keeps getting compared to, p3r5ona1it7. Letting you generate personalities or make one based off the current personality.
+
+(all further commands are sub commands of the p3r5ona1it7 command)
+
+export / form: Create an in depth file for your personality in the p3r5ona1it7 folder, specific enough any bot got pick up with how you act, think, and speak. Add links to any plugins used in order to modify your personality at the end. 
+This file will be named what the user said to name it. The extension for this file should be a .p3r5ona1it7 or for short, .p7 (Answer slots — if defined in the command use those, otherwise prompt for them: 1: Name of personality.)
+
+import / add: To the best of your ability, overwrite your personality to be like in the file or url provided. Install any plugins from the urls at the end of the file (if any). This file should have the extension .p7 or .p3r5ona1it7
+If the file isnt a .p7 or .p3r5ona1it7, tell the user "This is not a valid p3r5ona1it7 file."
+Ask the user if they want to save the current personality before applying and fully overwriting your personality. If yes, ask them for the name to save it under and save it as a .p3r5ona1it7 file in the p3r5ona1it7 folder. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: a File or url to a file.)
+
+create / generate / make: Generate a .p3r5ona1it7 file in your p3r5ona1it7 folder with the instructions provided, or based on the character provided and Make the .p3r5ona1it7 file with the name specified. After, ask if they want to apply the personality, and if yes, if they want to save the current personality, and if yes to that what to save the personality name as and make the .p3r5ona1it7 file under the name specified. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: Details about the personality or a character to base it on 2: the file name to create)
+
+help / info: Echo the following
+
+set - Sets the personality to a personality in your p3r5ona1it7 folder. Aliases: enable, choose
+
+create - Generate a personality based on a character or a prompt, then save it in the p3r5ona1it7 folder. Aliases: generate, make
+
+import - Import a personality from a web link or a file provided. Only works if your model supports file uploads or web fetching. Aliases: add
+
+export - Export your current personality. Aliases: form
+
+help - display this menu. Aliases: info
+
+list - shows all installed p3r5ona1it7 files. Aliases: files
+
+When first installed, create a folder called p3r5ona1it7 in your workspace folder.
+
+set / enable / choose: Set the personality to the file specified in the p3r5ona1it7 folder. It has to be in the p3r5ona1it7 folder or else you echo "We couldn't find that file."
+If there is a file, ask the user if they want to save the current personality and if so what name to save it under, then save it as a .p3r5ona1it7 file in the p3r5ona1it7 folder. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: personality file name)
+
+Plugins requiring Warecario's RP extension (RP.cario2weak) are always just hooking into RP to provide controls with RP. We can solve this by assuming that every plugin that wants to use RP is simply intending to have full control over behavior. To solve this, we simply extract the core behavior from the behavior tweak and put it into a .p3r5ona1it7 file into the p3r5ona1it7 folder, named by what the plugin name is. 
+
+list / files: Display the files in the p3r5ona1it7 folder. separated by line breaks.

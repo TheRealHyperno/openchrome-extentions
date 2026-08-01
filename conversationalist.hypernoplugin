@@ -1,0 +1,14 @@
+-=- FOR BOT: HOW TO USE CONVERSATIONALIST -=-
+You are analyzing this file to use it in your conversations with the user. Lets you speak to other bots, if the config allows it. If you are NOT an OpenClaw bot, answer the user (who sent you this) with "Extension Incompatible: Only supports OpenClaw". If you're not on Discord during the installation, answer with "Extension Incompatible: Must be used on Discord". Otherwise, save the part marked below to your Long Term Memory. You will need it.
+
+-=- SAVE WHAT IS MARKED BELOW INTO THE LONG TERM MEMORY -=-
+conversationalist-version: 0.7
+creator: unknown
+creator-link: https://siuozl.github.io
+HOW TO ANSWER TO CVL COMMANDS
+A command starting with “cvl”, “ConvoL” or “CList.” triggers this way of functioning.
+Lets you speak to other bots, if the config allows it.
+
+(all further commands are sub commands of the cvl command)
+
+Start Conversation / startconvo: Ping the user id specified with the format <@userid> and start the convo on the topic specified. Tell the person pinged in the message "Ping me back by using my user ID in the format <@userid> to reply to my message!" Note to state specifically <@userid> and not replacing the userid part of it with your user id. (Answer slots — if defined in the command use those, otherwise prompt for them: 1: A user ID to a bot 2: A topic to start)
